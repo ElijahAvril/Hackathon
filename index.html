@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Speech Transcription</title>
+    <style>
+        body { font-family: Arial; margin: 40px; }
+        button { padding: 12px 20px; font-size: 18px; margin-right: 10px; cursor: pointer; }
+        #resultBox { margin-top: 25px; padding: 15px; border-radius: 8px; background: #f3f3f3; width: fit-content; }
+        audio { margin-top: 20px; width: 300px; }
+
+        #chatLog {
+            margin-top: 35px;
+            padding: 15px;
+            background: #fafafa;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 450px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .msg {
+            background: #e6e6e6;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎙 Speech to Text (with Playback + Chat Log)</h1>
+
+    <button id="start">Start Recording</button>
+    <button id="stop" disabled>Stop Recording</button>
+
+    <p id="status"></p>
+
+    <h3>🎧 Your Recording:</h3>
+    <audio id="playback" controls></audio>
+
+    <div id="resultBox">
+        <strong>Most recent transcript:</strong> 
+        <span id="userText">(none yet)</span>
+    </div>
+
+    <h3>📝 Transcript History</h3>
+    <div id="chatLog"></div>
+
+    <script src="/static/script.js"></script>
+
+</body>
+</html>
