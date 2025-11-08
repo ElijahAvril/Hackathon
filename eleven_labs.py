@@ -39,6 +39,5 @@ def text_to_speech_bytes(text: str, voice_id: str | None = None, model_id: str =
         # forward message for debugging
         raise RuntimeError(f"ElevenLabs TTS failed: {resp.status_code} {resp.text}")
     
-    play(resp.content)
 
     return resp.content

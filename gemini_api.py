@@ -9,7 +9,7 @@ from google.genai import types
 
 dotenv.load_dotenv()
 
-GEMINI_KEY = os.environ.get("Gemini_Api_Key")
+GEMINI_KEY = os.getenv("Gemini_Api_Key")
 if not GEMINI_KEY:
     raise RuntimeError("Gemini_Api_Key not set in environment")
 
