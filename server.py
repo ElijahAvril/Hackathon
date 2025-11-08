@@ -43,7 +43,6 @@ def process_audio():
         # Always delete the temp file, even if an error occurs
         if os.path.exists(input_file):
             os.remove(input_file)
-            print(f"🗑️ Deleted temporary file: {input_file}")
 
 
     return jsonify({"transcript": text})

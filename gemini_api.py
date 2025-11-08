@@ -1,7 +1,6 @@
+import os
 import subprocess
 from datetime import datetime
-
-import os
 from typing import List, Dict
 import dotenv
 from google import genai
@@ -89,7 +88,7 @@ def generate_reply(
         # Always delete the temporary file
         if os.path.exists(output_file):
             os.remove(output_file)
-            print(f"🗑️ Deleted temporary response file: {output_file}")
+
 
     return ai_text
 
