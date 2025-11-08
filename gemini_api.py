@@ -1,3 +1,5 @@
+import subprocess
+from datetime import datetime
 
 import os
 from typing import List, Dict
@@ -9,7 +11,7 @@ from google.genai import types
 
 dotenv.load_dotenv()
 
-GEMINI_KEY = os.environ.get("Gemini_Api_Key")
+GEMINI_KEY = os.getenv("Gemini_Api_Key")
 if not GEMINI_KEY:
     raise RuntimeError("Gemini_Api_Key not set in environment")
 
@@ -40,6 +42,8 @@ def _build_prompt(user_text: str, history: List[Dict[str, str]], target_lang: st
     lines.append("Assistant:")
     return "\n".join(lines)
 
+
+
 def generate_reply(
     user_text: str,
     history: List[Dict[str, str]] | None = None,
@@ -55,18 +59,34 @@ def generate_reply(
         max_output_tokens = max_tokens
     )
 
-    # Create the request using the new SDK
     response = client.models.generate_content(
         model=MODEL_NAME,
         contents=[prompt],
         config=config
     )
 
-    # Extract text safely
     if response and response.text:
-        return response.text.strip()
+        ai_text = response.text.strip()
     else:
-        return "I'm sorry, I couldn't generate a response."
+        ai_text = "I'm sorry, I couldn't generate a response."
+
+    # Save to timestamped file
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = f"response_{timestamp}.txt"
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(ai_text)
+
+    print(f"📝 Saved AI response to {output_file}")
+
+    # Send result to response.py
+    try:
+        subprocess.run(["python", "response.py", output_file], check=True)
+        print("✅ Sent to response.py successfully")
+    except Exception as e:
+        print(f"⚠ Error sending to response.py: {e}")
+
+    return ai_text
 
 
 if __name__ == "__main__":
