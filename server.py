@@ -1,3 +1,5 @@
+from gemini_api import reply_from_file
+
 from flask import Flask, render_template, request, jsonify
 import whisper
 from pydub import AudioSegment
@@ -8,9 +10,7 @@ import subprocess
 
 app = Flask(__name__)
 model = whisper.load_model("base")  # you can change to "small" or "medium"
-
 GEMINI_SCRIPT = "gemini_api.py"
-
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -34,19 +34,11 @@ def process_audio():
     input_file = f"user_input_{uuid.uuid4()}.txt"
     with open(input_file, "w", encoding="utf-8") as f:
         f.write(text)
-    try:
-        subprocess.run(["python", GEMINI_SCRIPT, input_file], check=True)
-        print("✅ Sent transcription to Gemini API successfully")
-    except Exception as e:
-        print(f"⚠ Error sending to Gemini API: {e}")
-    finally:
-        # Always delete the temp file, even if an error occurs
-        if os.path.exists(input_file):
-            os.remove(input_file)
-            print(f"🗑️ Deleted temporary file: {input_file}")
+ 
+     # *** Generate the AI reply ***
+    ai_reply = reply_from_file(input_file)
 
-
-    return jsonify({"transcript": text})
+    return jsonify({"transcript": text, "ai_reply": ai_reply})
 
 
 if __name__ == "__main__":
