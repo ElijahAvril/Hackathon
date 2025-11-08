@@ -8,6 +8,7 @@ import subprocess
 
 app = Flask(__name__)
 model = whisper.load_model("base")  # you can change to "small" or "medium"
+
 GEMINI_SCRIPT = "gemini_api.py"
 
 @app.route("/")
@@ -38,6 +39,11 @@ def process_audio():
         print("✅ Sent transcription to Gemini API successfully")
     except Exception as e:
         print(f"⚠ Error sending to Gemini API: {e}")
+    finally:
+        # Always delete the temp file, even if an error occurs
+        if os.path.exists(input_file):
+            os.remove(input_file)
+            print(f"🗑️ Deleted temporary file: {input_file}")
 
 
     return jsonify({"transcript": text})

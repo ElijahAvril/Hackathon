@@ -85,14 +85,14 @@ def generate_reply(
         print("✅ Sent to response.py successfully")
     except Exception as e:
         print(f"⚠ Error sending to response.py: {e}")
+    finally:
+        # Always delete the temporary file
+        if os.path.exists(output_file):
+            os.remove(output_file)
+            print(f"🗑️ Deleted temporary response file: {output_file}")
 
     return ai_text
 
 
-if __name__ == "__main__":
-    # Simple test
-    user_input = "Hello, how are you?"
-    reply = generate_reply(user_input,history)
-    print(reply)
-    reply2 = generate_reply("What is currently in your context?", history)
-    print(reply2)
+
+
