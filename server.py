@@ -3,9 +3,12 @@ import whisper
 from pydub import AudioSegment
 import uuid
 import os
+import subprocess
+
 
 app = Flask(__name__)
 model = whisper.load_model("base")  # you can change to "small" or "medium"
+GEMINI_SCRIPT = "gemini_api.py"
 
 @app.route("/")
 def index():
@@ -26,7 +29,19 @@ def process_audio():
     os.remove(temp_name)
     os.remove(wav_path)
 
+
+    input_file = f"user_input_{uuid.uuid4()}.txt"
+    with open(input_file, "w", encoding="utf-8") as f:
+        f.write(text)
+    try:
+        subprocess.run(["python", GEMINI_SCRIPT, input_file], check=True)
+        print("✅ Sent transcription to Gemini API successfully")
+    except Exception as e:
+        print(f"⚠ Error sending to Gemini API: {e}")
+
+
     return jsonify({"transcript": text})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
