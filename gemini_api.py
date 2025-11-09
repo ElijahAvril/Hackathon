@@ -24,7 +24,7 @@ def _build_prompt(history: List[Dict[str, str]], language: str) -> str:
     """Convert message history to a string format and enforce target language"""
     lines = [
         "System: You are a helpful multilingual assistant.",
-        f"System: Always reply in {language}."
+        f"System: Mainly reply in {language}."
     ]
     for msg in history:
         role = msg["role"].capitalize()
@@ -66,9 +66,8 @@ def generate_reply(user_text: str, language: str = "en") -> str:
 
     return ai_text
 
-def reply_from_file(input_file: str, language: str = "en") -> str:
+def reply_from_file(input_file: str, language: str) -> str:
     """Read user's text and generate reply in selected language"""
     with open(input_file, "r", encoding="utf-8") as f:
         user_text = f.read().strip()
-        os.remove(input_file)
     return generate_reply(user_text, language)
