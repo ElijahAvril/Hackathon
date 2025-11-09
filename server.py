@@ -37,6 +37,8 @@ def process_audio():
  
      # *** Generate the AI reply ***
     ai_reply = reply_from_file(input_file)
+    print(f"Transcript type: {type(text)}, value: {text}")
+    print(f"AI reply type: {type(ai_reply)}, value: {ai_reply}")
 
     return jsonify({"transcript": text, "ai_reply": ai_reply})
 

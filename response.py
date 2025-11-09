@@ -4,12 +4,16 @@ from elevenlabs.play import play
 import os
 import sys
 
-# Load .env
+# Load environment variables
 load_dotenv()
-client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
-# Read text from file
-# Get filename passed from gemini_api.py
+API_KEY = os.getenv("Eleven_Labs_Api_Key")
+if not API_KEY:
+    raise RuntimeError("ELEVENLABS_API_KEY not set in environment")
+
+client = ElevenLabs(api_key=API_KEY)
+
+# Get input file from command line
 if len(sys.argv) < 2:
     raise ValueError("No input file provided. Usage: python tts_eleven.py <file_path>")
 
@@ -18,8 +22,12 @@ INPUT_FILE = sys.argv[1]
 if not os.path.exists(INPUT_FILE):
     raise FileNotFoundError(f"File not found: {INPUT_FILE}")
 
+# Read text from file
 with open(INPUT_FILE, "r", encoding="utf-8") as f:
     text = f.read().strip()
+
+if not text:
+    raise ValueError(f"No text found in {INPUT_FILE}")
 
 print(f"🔊 Converting text from: {INPUT_FILE}")
 
@@ -31,9 +39,8 @@ audio_stream = client.text_to_speech.convert(
     output_format="mp3_44100_128",
 )
 
-# Join streaming chunks
-audio_bytes = b"".join(chunk for chunk in audio_stream)
-
-# Play result
+# Play audio
 print("Playing audio… 🎧")
-play(audio_bytes)
+play(audio_stream)
+
+print("✅ Done!")

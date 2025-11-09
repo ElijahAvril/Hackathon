@@ -7,6 +7,7 @@ const statusText = document.getElementById("status");
 const userText = document.getElementById("userText");
 const playback = document.getElementById("playback");
 const chatLog = document.getElementById("chatLog");
+const aiResponseBox = document.getElementById("aiResponseBox");
 
 startBtn.onclick = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -54,6 +55,7 @@ async function sendAudio(blob) {
     statusText.textContent = "Done!";
 
     addToChatLog(data.transcript);
+    addToAIChatLog(data.ai_reply);
 }
 
 function addToChatLog(text) {
@@ -64,4 +66,14 @@ function addToChatLog(text) {
 
     // auto scroll to newest message
     chatLog.scrollTop = chatLog.scrollHeight;
+}
+
+function addToAIChatLog(text) {
+    const msg = document.createElement("div");
+    msg.className = "msg";
+    msg.textContent = text;
+    aiResponseBox.appendChild(msg);
+
+    // auto scroll to newest message
+    aiResponseBox.scrollTop = aiResponseBox.scrollHeight;
 }

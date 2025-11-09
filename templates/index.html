@@ -19,8 +19,20 @@
             overflow-y: auto;
         }
 
+        #aiResponseBox {
+            margin-top: 35px;
+            padding: 15px;
+            background: #fafafa;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 450px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
         .msg {
             background: #e6e6e6;
+            border: 1px solid #ccc;
             padding: 10px;
             border-radius: 6px;
             margin-bottom: 10px;
@@ -47,14 +59,13 @@
     <h3>📝 Transcript History</h3>
     <div id="chatLog"></div>
 
-    <script src="/static/script.js"></script>
+    
 
     <!-- AI Conversation Panel -->
 
     <h3>🤖 AI Responses</h3>
-    <div id="chatLog"></div>
+    <div id="aiResponseBox"></div>
 
-    <script src="/static/script.js"></script>
-
+<script src="/static/script.js"></script>
 </body>
 </html>
