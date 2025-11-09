@@ -45,6 +45,9 @@ async function sendAudio(blob) {
     const formData = new FormData();
     formData.append("audio", blob, "audio.webm");
 
+    const selectedLang = document.getElementById("languageSelect").value;
+    formData.append("language", selectedLang);
+    
     const response = await fetch("/process", {
         method: "POST",
         body: formData

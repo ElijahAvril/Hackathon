@@ -18,29 +18,30 @@ def index():
 @app.route("/process", methods=["POST"])
 def process_audio():
     file = request.files["audio"]
+    language = request.form.get("language", "en")  # 🆕 default English
+
     temp_name = f"temp_{uuid.uuid4()}.webm"
     file.save(temp_name)
 
     wav_path = temp_name.replace(".webm", ".wav")
     AudioSegment.from_file(temp_name).export(wav_path, format="wav")
 
+    # 🧠 Transcribe with Whisper — optionally detect or use provided language
     result = model.transcribe(wav_path)
     text = result["text"]
 
     os.remove(temp_name)
     os.remove(wav_path)
 
-
     input_file = f"user_input_{uuid.uuid4()}.txt"
     with open(input_file, "w", encoding="utf-8") as f:
         f.write(text)
- 
-     # *** Generate the AI reply ***
-    ai_reply = reply_from_file(input_file)
-    print(f"Transcript type: {type(text)}, value: {text}")
-    print(f"AI reply type: {type(ai_reply)}, value: {ai_reply}")
+
+    # 🧠 Pass language into Gemini
+    ai_reply = reply_from_file(input_file, language=language)
 
     return jsonify({"transcript": text, "ai_reply": ai_reply})
+
 
 
 if __name__ == "__main__":
